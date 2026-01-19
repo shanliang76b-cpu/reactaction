@@ -29,7 +29,7 @@ jobs:
           cache: pnpm
 
       - run: pnpm install
-      - run: pnpm build:prod --outDir dist/prod
+      - run: pnpm --filter web build:prod
 
       - run: |
           echo "部署到生产环境"

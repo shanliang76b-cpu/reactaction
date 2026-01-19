@@ -25,7 +25,7 @@ jobs:
           cache: pnpm
 
       - run: pnpm install
-      - run: pnpm build:dev  --outDir dist/dev
+      - run: pnpm --filter web build:dev
 
       - run: |
           echo "部署到 dev 服务器 / dev Pages"
