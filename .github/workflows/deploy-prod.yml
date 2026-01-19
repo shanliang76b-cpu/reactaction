@@ -27,9 +27,15 @@ jobs:
         with:
           node-version: 20
           cache: pnpm
-
+        
+      - run: |
+          echo "PWD=$(pwd)"
+          ls -la apps/web || true
+          ls -la apps/web/dist || true
+          find apps/web -maxdepth 3 -type d | sed 's|^|DIR: |'
+          
       - run: pnpm install
-      - run: pnpm run build:prod
+      - run: pnpm --filter web build:prod
 
       - run: |
           echo "部署到生产环境"
