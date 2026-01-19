@@ -29,8 +29,11 @@ jobs:
           cache: pnpm
           
       - run: pnpm install
-      # - run: VITE_API_BASE=/repo/ pnpm build
       - run: pnpm build
+      - name: Inspect dist
+        run: |
+          ls -la dist
+          ls -la dist/assets
 
       - run: |
           echo "部署到生产环境"
