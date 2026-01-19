@@ -27,6 +27,21 @@ jobs:
       - run: pnpm install
       - run: pnpm --filter web build:dev
 
+      - name: HARD DEBUG
+        run: |
+          echo "=== repo root ==="
+          pwd
+          ls -la
+
+          echo "=== apps ==="
+          ls -la apps || true
+
+          echo "=== apps/web ==="
+          ls -la apps/web || true
+
+          echo "=== find dist ==="
+          find . -type d -name dist | sed 's|^|FOUND: |'
+
       - run: |
           echo "部署到 dev 服务器 / dev Pages"
 
