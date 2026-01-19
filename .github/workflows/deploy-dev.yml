@@ -25,7 +25,7 @@ jobs:
           cache: pnpm
 
       - run: pnpm install
-      - run: VITE_BASE_PATH=/repo/dev/ pnpm build
+      - run: VITE_API_BASE=/repo/dev/ pnpm build
 
       - run: |
           echo "部署到 dev 服务器 / dev Pages"
