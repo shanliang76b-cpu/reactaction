@@ -1,27 +1,38 @@
-name: CI Github Pages
+name: Deploy Pages
+
 on:
-  #监听push操作
   push:
-    branches:
-      - main # 这里只配置了master分支，所以只有推送master分支才会触发以下任务
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
 jobs:
-  # 任务ID
-  build-and-deploy:
-    # 运行环境
+  deploy:
     runs-on: ubuntu-latest
-    # 步骤
+    environment:
+      name: github-pages
+
     steps:
-      # 官方action，将代码拉取到虚拟机
-      - name: Checkout  ️ 
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
-      - name: Install and Build   # 安装依赖、打包，如果提前已打包好无需这一步
-        run: |
-          npm install
-          npm run build
-
-      - name: Deploy   # 部署
-        uses: JamesIves/github-pages-deploy-action@v4
+      - uses: pnpm/action-setup@v4
         with:
-          branch: gh-pages # 部署后提交到那个分支
-          folder: dist # 这里填打包好的目录名称
+          version: 9
+
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 20
+          cache: pnpm
+
+      - run: pnpm install
+      - run: pnpm build
+
+      - uses: actions/configure-pages@v3
+      - uses: actions/upload-pages-artifact@v1
+        with:
+          path: dist
+      - uses: actions/deploy-pages@v1
