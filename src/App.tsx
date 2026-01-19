@@ -5,10 +5,11 @@ import './App.css'
 
 function App() {
   const [count, setCount] = useState(0)
-
+  const apiBase = import.meta.env.VITE_API_BASE
   return (
     <>
       <div>
+        <h3>当前环境：{apiBase}</h3>
         <a href="https://vite.dev" target="_blank">
           <img src={viteLogo} className="logo" alt="Vite logo" />
         </a>
