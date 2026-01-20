@@ -52,8 +52,7 @@ jobs:
         run: |
           echo "==== output ===="
           ls -la output
-          echo "==== output/dev ===="
-          ls -la output/dev || echo "NO DEV"
+       
 
       - uses: actions/upload-pages-artifact@v3
         with:
