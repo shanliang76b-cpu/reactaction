@@ -31,6 +31,8 @@ jobs:
           cache: pnpm
 
       - run: pnpm install
+      - name: Typecheck (tsc)
+        run: pnpm exec tsc -b
 
       # IMPORTANT:
       # GitHub Pages deploy is "whole-site" (it replaces previous content).
@@ -40,13 +42,13 @@ jobs:
       # - Dev build under /dev/
       - name: Build prod (site root)
         run: |
-          VITE_API_BASE=/ pnpm build --mode production
+          VITE_API_BASE=/ pnpm exec vite build --mode production
           mkdir -p output
           cp -r dist/* output/
 
       - name: Build dev (/dev)
         run: |
-          VITE_API_BASE=/dev/ pnpm build --mode dev
+          VITE_API_BASE=/dev/ pnpm exec vite build --mode dev
           mkdir -p output/dev
           cp -r dist/* output/dev/
 
