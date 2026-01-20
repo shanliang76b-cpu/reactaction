@@ -32,17 +32,19 @@ jobs:
 
       - run: pnpm install
 
-     # ---------- Build PROD ----------
-      - name: Build prod
-        if: github.ref == 'refs/heads/main'
+      # IMPORTANT:
+      # GitHub Pages deploy is "whole-site" (it replaces previous content).
+      # If we only upload / OR /dev per-branch, the other path becomes 404 after deployment.
+      # So we always build and upload BOTH:
+      # - Prod build at site root (/)
+      # - Dev build under /dev/
+      - name: Build prod (site root)
         run: |
           VITE_API_BASE=/ pnpm build --mode production
           mkdir -p output
           cp -r dist/* output/
 
-      # ---------- Build DEV ----------
-      - name: Build dev
-        if: github.ref == 'refs/heads/dev'
+      - name: Build dev (/dev)
         run: |
           VITE_API_BASE=/dev/ pnpm build --mode dev
           mkdir -p output/dev
