@@ -1,4 +1,4 @@
-# name: Deploy static content to Pages
+# name: Deploy Prod 部署生产环境
 
 # on:
 #   push:
@@ -9,17 +9,12 @@
 #   contents: read
 #   pages: write
 #   id-token: write
-
-# concurrency:
-#   group: pages
-#   cancel-in-progress: true
-
+  
 # jobs:
-#   deploy:
+#   deploy-prod:
 #     runs-on: ubuntu-latest
 #     environment:
-#       name: github-pages
-#       url: ${{ steps.deployment.outputs.page_url }}
+#       name: prod   # 🔥 关键点
 
 #     steps:
 #       - uses: actions/checkout@v4
@@ -32,15 +27,16 @@
 #         with:
 #           node-version: 20
 #           cache: pnpm
-
+          
 #       - run: pnpm install
 #       - run: pnpm build
 
-#       - uses: actions/configure-pages@v5
+#       - run: |
+#           echo "部署到生产环境"
 
+#       - uses: actions/configure-pages@v5
 #       - uses: actions/upload-pages-artifact@v3
 #         with:
-#           path: ./dist
-
+#           path: dist
 #       - id: deployment
 #         uses: actions/deploy-pages@v4

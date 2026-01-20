@@ -1,20 +1,22 @@
-name: Deploy Prod
+name: Deploy Pages (prod & dev)
 
 on:
   push:
-    branches: [main]
+    branches:
+      - main
+      - dev
   workflow_dispatch:
 
 permissions:
   contents: read
   pages: write
   id-token: write
-  
+
 jobs:
-  deploy-prod:
+  deploy:
     runs-on: ubuntu-latest
     environment:
-      name: prod   # 🔥 关键点
+      name: github-pages
 
     steps:
       - uses: actions/checkout@v4
@@ -27,16 +29,34 @@ jobs:
         with:
           node-version: 20
           cache: pnpm
-          
+
       - run: pnpm install
-      - run: pnpm build
 
-      - run: |
-          echo "部署到生产环境"
+      # ---------- Build PROD ----------
+      - name: Build prod
+        if: github.ref == 'refs/heads/main'
+        run: |
+          VITE_BASE=/ pnpm build
+          mkdir -p output
+          cp -r dist/* output/
 
-      - uses: actions/configure-pages@v5
+      # ---------- Build DEV ----------
+      - name: Build dev
+        if: github.ref == 'refs/heads/dev'
+        run: |
+          VITE_BASE=/dev/ pnpm build
+          mkdir -p output/dev
+          cp -r dist/* output/dev/
+
+      - name: Inspect output
+        run: |
+          echo "==== output ===="
+          ls -la output
+          echo "==== output/dev ===="
+          ls -la output/dev || echo "NO DEV"
+
       - uses: actions/upload-pages-artifact@v3
         with:
-          path: dist
-      - id: deployment
-        uses: actions/deploy-pages@v4
+          path: output
+
+      - uses: actions/deploy-pages@v4
