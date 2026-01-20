@@ -16,7 +16,7 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     environment:
-      name: github-pages
+      name: dev
 
     steps:
       - uses: actions/checkout@v4
@@ -32,11 +32,11 @@ jobs:
 
       - run: pnpm install
 
-      # ---------- Build PROD ----------
+     # ---------- Build PROD ----------
       - name: Build prod
         if: github.ref == 'refs/heads/main'
         run: |
-          VITE_BASE=/ pnpm build
+          VITE_API_BASE=/ pnpm build --mode production
           mkdir -p output
           cp -r dist/* output/
 
@@ -44,7 +44,7 @@ jobs:
       - name: Build dev
         if: github.ref == 'refs/heads/dev'
         run: |
-          VITE_BASE=/dev/ pnpm build
+          VITE_API_BASE=/dev/ pnpm build --mode dev
           mkdir -p output/dev
           cp -r dist/* output/dev/
 
